@@ -3,6 +3,7 @@
 import chalk from 'chalk';
 import {program} from 'commander';
 import Sanity from '#lib/sanity';
+import stripAnsi from 'strip-ansi';
 
 program
 	.name('sanity')
@@ -22,13 +23,34 @@ Promise.resolve()
 	.then(()=> Sanity.loadEnv(program.env))
 	.then(()=> Sanity.exec())
 	.then(report => Object.values(report)
-		.forEach(item => Sanity.log(0, ...[
-			chalk.bgBlue(item.id),
-			item.status == 'ok' ? chalk.green('OK')
-			: item.status == 'timeout' ? chalk.red('TIMEOUT')
-			: chalk.bgRed(item.status.toUpperCase()),
-			...(item.text ? [item.text] : []),
-		]))
+		.forEach(item => {
+			let hasMultiline = item.text && Array.isArray(item.text) && item.text.length > 1;
+
+			let linePrefix = [
+				chalk.bgBlue(item.id),
+				item.status == 'ok' ? chalk.green('OK')
+				: item.status == 'timeout' ? chalk.red('TIMEOUT')
+				: chalk.bgRed(item.status.toUpperCase()),
+			];
+
+			if (hasMultiline) {
+				let prefixLength = linePrefix.map(stripAnsi).join(' ').length;
+				item.text.forEach((line, lineIndex) =>
+					Sanity.log(0, ...[
+						...(lineIndex == 0
+							? linePrefix
+							: [' '.repeat(prefixLength)]
+						),
+						line,
+					])
+				);
+			} else { // Single line output
+				Sanity.log(0, ...[
+					...linePrefix,
+					...(item.text ? [item.text] : []),
+				])
+			}
+		})
 	)
 	.then(()=> process.exit(0))
 	.catch(e => {
