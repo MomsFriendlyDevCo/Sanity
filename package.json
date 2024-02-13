@@ -1,6 +1,6 @@
 {
   "name": "@momsfriendlydevco/sanity",
-  "description": "Generic server sanity checking environment",
+  "description": "Generic server sanity checking",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
