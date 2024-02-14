@@ -3,6 +3,9 @@
   "description": "Generic server sanity checking",
   "version": "1.0.0",
   "type": "module",
+  "bin": {
+    "sanity": "./ui/cli.js"
+  },
   "scripts": {
     "lint": "eslint .",
     "tst": "mocha"
