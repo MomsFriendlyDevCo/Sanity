@@ -10,8 +10,9 @@ import 'commander-extras';
 program
 	.name('sanity')
 	.usage('[options] [test-id...]')
+	.description('Run Sanity modules')
 	.option('-p, --path [paths]', 'Override the default environment globpath')
-	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', function(i, v) { return v + 1 }, 0)
+	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', (i, v) => v + 1, 0)
 	.option('--no-color', 'Force disable color')
 	.env('SANITY_MODULES', 'Comma / Semi-colon seperated value list of all glob-paths to search for modules')
 	.note('All IDs can be any valid @MomsFriendlyDevCo/Match expression such as "exact" "/regExp/" or "globs*"')
