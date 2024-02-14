@@ -13,6 +13,7 @@
     "#utils/*": "./utils/*.js"
   },
   "exports": {
+    "./ui/*": "./ui/*.js",
     "./utils": "./utils/utils.js",
     "./utils/*": "./utils/*.js"
   },
