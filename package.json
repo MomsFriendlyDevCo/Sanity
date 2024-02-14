@@ -51,6 +51,7 @@
     "commander": "^12.0.0",
     "commander-extras": "^1.4.0",
     "execa": "^8.0.1",
+    "globby": "^14.0.1",
     "strip-ansi": "^7.1.0"
   }
 }
