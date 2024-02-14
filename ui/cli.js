@@ -15,6 +15,8 @@ program
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', (i, v) => v + 1, 0)
 	.option('--no-align', 'Do not align columns in output')
 	.option('--no-color', 'Force disable color')
+	.option('--no-modules', 'Skip individual module output')
+	.option('--no-verdict', 'Skip output of an overall verdict')
 	.env('SANITY_MODULES', 'Comma / Semi-colon seperated value list of all glob-paths to search for modules')
 	.note('All IDs can be any valid @MomsFriendlyDevCo/Match expression such as "exact" "/regExp/" or "globs*"')
 	.parse(process.argv);
@@ -52,11 +54,21 @@ Promise.resolve()
 				if (args.align && prefixLength < largestModPrefix)
 					linePrefix.push(' '.repeat(largestModPrefix - prefixLength));
 
-				Sanity.log(0, ...[
-					...linePrefix,
-					...(item.text ? [item.text] : []),
-				])
+				if (args.modules)
+					Sanity.log(0, ...[
+						...linePrefix,
+						...(item.text ? [item.text] : []),
+					])
 			})
+
+		// Verdict output
+		if (args.verdict)
+			Sanity
+				.log(0, '')
+				.log(0,
+					Sanity.colorize('verdictLabel', 'Verdict:'),
+					Sanity.colorize(report.verdict == 'pass' ? 'statusPass' : 'statusFail', report.verdict)
+				)
 	})
 	.then(()=> process.exit(0))
 	.catch(e => {

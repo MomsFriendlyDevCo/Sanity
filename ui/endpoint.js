@@ -5,6 +5,7 @@ import Sanity from '#lib/sanity';
 *
 * @param {Object} [options] Additional options to mutate behaviour
 * @param {String|Array} [options.paths] Overriding module glob-path from the default process.env.SANITY_MODULES
+* @param {Boolean} [options.header] Include a simple `SANITY:{PASS|FAIL}` header as the very first line
 * @param {Object} [options.execOptions] Options to pass to each invocation of `Sanity.exec()`
 *
 * @returns {Promise<Function>} Eventual middleware function
@@ -12,6 +13,7 @@ import Sanity from '#lib/sanity';
 export default async function sanityMiddleware(options) {
 	let settings = {
 		paths: null,
+		header: true,
 		execOptions: {},
 		...options,
 	};
