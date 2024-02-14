@@ -23,15 +23,12 @@ let args = {
 	argv: program.args, // Add remaining args (files in this case) as its own property
 };
 
-console.log('FINAL', args);
-
-
 Promise.resolve()
 	.then(()=> Sanity.loadEnv(program.path))
 	.then(()=> Sanity.exec({
 		filter: args.argv.length > 0 // Compute a filter based on the incoming test-ids (argv) values
-		? module => match.isMatch(args.argv, module.id)
-		: null
+			? module => match.isMatch(args.argv, module.id)
+			: ()=> true,
 	}))
 	.then(report => Object.values(report)
 		.forEach(item => {
