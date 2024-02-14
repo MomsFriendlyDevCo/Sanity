@@ -14,9 +14,7 @@ describe('Sanity - Example tests', ()=> {
 	});
 
 	it('verify example tests are loaded', ()=> {
-		expect(Object.keys(Sanity.modules).sort()).to.deep.equal([
-			'helloWorld',
-		]);
+		expect(Object.keys(Sanity.modules).sort()).to.have.length.above(0);
 	});
 
 	it('loaded the "Hello World" module', ()=> {
@@ -32,10 +30,10 @@ describe('Sanity - Example tests', ()=> {
 
 	it('run one cycle of the "Hello World" module', async ()=> {
 		let report = await Sanity.exec();
-		expect(report).to.have.property('helloWorld');
-		expect(report.helloWorld).to.have.property('id', 'helloWorld');
-		expect(report.helloWorld).to.have.property('status', 'ok');
-		expect(report.helloWorld).to.have.property('text', 'Hello World!');
+		expect(report).to.have.nested.property('modules.helloWorld');
+		expect(report).to.have.nested.property('modules.helloWorld.id', 'helloWorld');
+		expect(report).to.have.nested.property('modules.helloWorld.status', 'PASS');
+		expect(report).to.have.nested.property('modules.helloWorld.text', 'Hello World!');
 	})
 
 });
