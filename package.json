@@ -33,8 +33,7 @@
   "engines": {
     "node": ">=18.17.1"
   },
-  "private": true,
-  "license": "PRIVATE",
+  "license": "MIT",
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^1.0.9",
     "chai": "^5.1.0",
