@@ -55,7 +55,6 @@ Promise.resolve()
 				Sanity.log(0, ...[
 					...linePrefix,
 					...(item.text ? [item.text] : []),
-					`PL: ${prefixLength} / ${largestModPrefix}`,
 				])
 			})
 	})
