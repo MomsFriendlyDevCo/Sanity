@@ -24,21 +24,24 @@ let args = {
 };
 
 Promise.resolve()
-	.then(()=> Sanity.loadEnv(program.path))
+	.then(()=> Sanity
+		.set('logLevel', args.verbose ?? 0)
+		.loadEnv(program.path)
+	)
 	.then(()=> Sanity.exec({
 		filter: args.argv.length > 0 // Compute a filter based on the incoming test-ids (argv) values
 			? module => match.isMatch(args.argv, module.id)
 			: ()=> true,
 	}))
-	.then(report => Object.values(report)
+	.then(report => Object.values(report.modules)
 		.forEach(item => {
 			let hasMultiline = item.text && Array.isArray(item.text) && item.text.length > 1;
 
 			let linePrefix = [
-				chalk.bgBlue(item.id),
-				item.status == 'ok' ? chalk.green('OK')
-				: item.status == 'timeout' ? chalk.red('TIMEOUT')
-				: chalk.bgRed(item.status.toUpperCase()),
+				Sanity.colorize('module', item.id),
+				item.status == 'PASS' ? Sanity.colorize('statusPass', 'PASS')
+				: item.status == 'WARN' ? Sanity.colorize('statusWarn', 'WARN')
+				: Sanity.colorize('statusFail', item.status),
 			];
 
 			if (hasMultiline) {
