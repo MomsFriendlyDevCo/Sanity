@@ -16,6 +16,7 @@ program
 	.option('--no-align', 'Do not align columns in output')
 	.option('--no-color', 'Force disable color')
 	.option('--no-modules', 'Skip individual module output')
+	.option('--no-summary', 'Skip output of an overall summary')
 	.option('--no-verdict', 'Skip output of an overall verdict')
 	.env('SANITY_MODULES', 'Comma / Semi-colon seperated value list of all glob-paths to search for modules')
 	.note('All IDs can be any valid @MomsFriendlyDevCo/Match expression such as "exact" "/regExp/" or "globs*"')
@@ -38,6 +39,7 @@ Promise.resolve()
 			: ()=> true,
 	}))
 	.then(report => {
+		// Module output
 		let largestModPrefix = Object.values(report.modules)
 			.map(mod => mod.status + mod.id)
 			.reduce((t, v) => v.length > t ? v.length : t, 0);
@@ -60,6 +62,19 @@ Promise.resolve()
 						...(item.text ? [item.text] : []),
 					])
 			})
+
+		// Summary output
+		if (args.summary)
+			Sanity
+				.log(0, '')
+				.log(0, Object.entries(report.summary)
+					.map(([status, count]) =>
+						Sanity.colorize('summaryLabel', status)
+						+ ':'
+						+ Sanity.colorize('summaryValue', count)
+					)
+					.join(', ')
+				);
 
 		// Verdict output
 		if (args.verdict)
