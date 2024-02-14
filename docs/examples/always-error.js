@@ -3,8 +3,6 @@ export default {
 	title: 'A module which will always fail',
 	frequency: '1m',
 	handler() {
-		return new Promise(resolve =>
-			setTimeout(()=> resolve('FAIL:This module will always fail', 100))
-		);
+		throw new Error('This module will always error out');
 	},
 }

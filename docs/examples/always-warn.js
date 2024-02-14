@@ -4,7 +4,7 @@ export default {
 	frequency: '1m',
 	handler() {
 		return new Promise(resolve =>
-			setTimeout(()=> resolve('WARN: This test will always warn', 100))
+			setTimeout(()=> resolve('WARN: This module will always warn', 100))
 		);
 	},
 }
