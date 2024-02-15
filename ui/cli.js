@@ -1,16 +1,19 @@
 #!/usr/bin/node
 
+import chalk from 'chalk';
 import match from '@momsfriendlydevco/match';
-import {program} from 'commander';
+import {program as Program} from 'commander';
 import Sanity from '#lib/sanity';
 import stripAnsi from 'strip-ansi';
-import 'commander-extras';
+import commanderExtras from 'commander-extras';
 
-program
+
+let program = commanderExtras(Program)
 	.name('sanity')
 	.usage('[options] [test-id...]')
 	.description('Run Sanity modules')
 	.option('-p, --path [paths]', 'Override the default environment globpath')
+	.option('-r, --require [path]', 'Optional file to further configure sanity before running')
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', (i, v) => v + 1, 0)
 	.option('--no-align', 'Do not align columns in output')
 	.option('--no-color', 'Force disable color')
