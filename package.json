@@ -1,7 +1,7 @@
 {
   "name": "@momsfriendlydevco/sanity",
   "description": "Generic server sanity checking",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "bin": {
     "sanity": "./ui/cli.js"
