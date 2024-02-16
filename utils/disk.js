@@ -12,13 +12,14 @@ const osPlatform = platform();
 *
 * @param {Object} [options] Additional options to mutate behaviour
 * @param {Boolean} [options.checkPlatform=true] Verify that this Sanity instance is running on a valid platform first
-* @param {Number} [options.minFree] Minimum percentage of disk space that should be available
+* @param {Number} [options.minFree=10] Minimum percentage of disk space that should be available
 * @param {Boolean} [options.writable] Verify that the path should be writable
 */
 export default function SanityUtilsDisk(path, options) {
 	let settings = {
 		checkPlatform: true,
-		minFree: null,
+		minFree: 10,
+		writable: false,
 		...options,
 	};
 
@@ -50,13 +51,13 @@ export default function SanityUtilsDisk(path, options) {
 				size: data.size * 1024,
 				used: data.used * 1024,
 				avail: data.avail * 1024,
-				usePercent: ((data.used / data.size) * 100).toFixed(1),
-				freePercent: (100 - ((data.used / data.size) * 100)).toFixed(1),
+				usePercent: (data.used / data.size) * 100,
+				freePercent: 100 - ((data.used / data.size) * 100),
 				mounted: data.mounted,
 			}))
 			.then(data => data.freePercent <= settings.minFree
-				? {free: `FAIL: Only ${data.freePercent}% disk remaining - ${readable.fileSize(data.used)} / ${readable.fileSize(data.size)} @ ${data.usePercent}% used for mount point ${data.mounted}`}
-				: {free: `PASS: ${readable.fileSize(data.used)} / ${readable.fileSize(data.size)} @ ${data.freePercent}% free for mount point ${data.mounted}`}
+				? {free: `FAIL: Only ${data.freePercent.toFixed(1)}% disk remaining - ${readable.fileSize(data.used)} / ${readable.fileSize(data.size)} @ ${data.usePercent.toFixed(1)}% used for mount point ${data.mounted}`}
+				: {free: `PASS: ${readable.fileSize(data.used)} / ${readable.fileSize(data.size)} @ ${data.freePercent.toFixed(1)}% free for mount point ${data.mounted}`}
 			),
 		// }}}
 		// Check writable {{{
