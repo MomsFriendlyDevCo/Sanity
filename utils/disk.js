@@ -36,22 +36,22 @@ export default function SanityUtilsDisk(path, options) {
 			.then(data => data.slice(1)[0]) // Remove first line (headers)
 			.then(data => data.split(/\s+/)) // Split by whitespace
 			.then(data => { // Decipher df output based on OS
-				let device, size, used, avail, usePercent, mounted;
+				let device, size, used, avail, mounted;
 
 				if (platform == 'darwin') {
-					[device, size, used, avail, usePercent, , , , mounted] = data;
+					[device, size, used, avail, , , , , mounted] = data;
 				} else {
-					[device, size, used, avail, usePercent, mounted] = data;
+					[device, size, used, avail, , mounted] = data;
 				}
 
-				return {device, size, used, avail, usePercent, mounted};
+				return {device, size, used, avail, mounted};
 			})
 			.then(data => ({
 				size: data.size * 1024,
 				used: data.used * 1024,
 				avail: data.avail * 1024,
-				usePercent: parseFloat(data.usePercent),
-				freePercent: (data.used / data.size).toFixed(1),
+				usePercent: ((data.used / data.size) * 100).toFixed(1),
+				freePercent: (100 - ((data.used / data.size) * 100)).toFixed(1),
 				mounted: data.mounted,
 			}))
 			.then(data => data.freePercent <= settings.minFree
