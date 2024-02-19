@@ -84,7 +84,7 @@ Promise.resolve()
 				.log(0, '')
 				.log(0,
 					Sanity.colorize('verdictLabel', 'Verdict:'),
-					Sanity.colorize(report.verdict == 'pass' ? 'statusPass' : 'statusFail', report.verdict)
+					Sanity.colorize(report.verdict == 'PASS' ? 'statusPass' : 'statusFail', report.verdict)
 				)
 	})
 	.then(()=> process.exit(0))
