@@ -47,7 +47,7 @@ export default async function sanityMiddleware(options) {
 
 				return [
 					...(settings.verdictHeader ? [`SANITY:${report.verdict}`, ''] : []),
-					...Object.values(report.modules)
+					...report.modules
 						.map(mod => [
 							mod.status + ':',
 							mod.id.padEnd(largestModPrefix),

@@ -30,7 +30,7 @@ describe('Sanity - Example tests', ()=> {
 
 
 	it('run one cycle of the "Hello World" module', async ()=> {
-		let report = await Sanity.exec();
+		let report = await Sanity.exec({wantArray: false});
 		expect(report).to.have.nested.property('modules.helloWorld');
 		expect(report).to.have.nested.property('modules.helloWorld.id', 'helloWorld');
 		expect(report).to.have.nested.property('modules.helloWorld.status', 'PASS');

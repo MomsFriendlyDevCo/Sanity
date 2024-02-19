@@ -54,7 +54,7 @@ Promise.resolve()
 			.reduce((t, v) => v.length > t ? v.length : t, 0);
 
 		if (args.modules)
-			Object.values(report.modules)
+			report.modules
 				.forEach(item => {
 					let linePrefix = [
 						item.status == 'PASS' ? Sanity.colorize('statusPass', 'PASS')
