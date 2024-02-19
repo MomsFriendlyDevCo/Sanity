@@ -17,6 +17,7 @@ let program = commanderExtras(Program)
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', (i, v) => v + 1, 0)
 	.option('--no-align', 'Do not align columns in output')
 	.option('--no-color', 'Force disable color')
+	.option('--no-cache', 'Disable caching of module rules - forces all modules to run')
 	.option('--no-modules', 'Skip individual module output')
 	.option('--no-summary', 'Skip output of an overall summary')
 	.option('--no-verdict', 'Skip output of an overall verdict')
@@ -46,24 +47,25 @@ Promise.resolve()
 			.map(mod => mod.status + mod.id)
 			.reduce((t, v) => v.length > t ? v.length : t, 0);
 
-		Object.values(report.modules)
-			.forEach(item => {
-				let linePrefix = [
-					item.status == 'PASS' ? Sanity.colorize('statusPass', 'PASS')
-					: item.status == 'WARN' ? Sanity.colorize('statusWarn', 'WARN')
-					: Sanity.colorize('statusFail', item.status),
-					Sanity.colorize('module', item.id),
-				];
-				let prefixLength = stripAnsi(linePrefix.join(' ')).length;
-				if (args.align && prefixLength < largestModPrefix)
-					linePrefix.push(' '.repeat(largestModPrefix - prefixLength));
+		if (args.modules)
+			Object.values(report.modules)
+				.forEach(item => {
+					let linePrefix = [
+						item.status == 'PASS' ? Sanity.colorize('statusPass', 'PASS')
+						: item.status == 'WARN' ? Sanity.colorize('statusWarn', 'WARN')
+						: Sanity.colorize('statusFail', item.status),
+						Sanity.colorize('module', item.id),
+					];
+					let prefixLength = stripAnsi(linePrefix.join(' ')).length;
+					if (args.align && prefixLength < largestModPrefix)
+						linePrefix.push(' '.repeat(largestModPrefix - prefixLength));
 
-				if (args.modules)
 					Sanity.log(0, ...[
 						...linePrefix,
 						...(item.text ? [item.text] : []),
+						...(item.cached ? [Sanity.colorize('cached', `(cached @ ${item.cached})`)] : [])
 					])
-			})
+				})
 
 		// Summary output
 		if (args.summary)

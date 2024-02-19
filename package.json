@@ -44,6 +44,7 @@
     "extends": "@momsfriendlydevco"
   },
   "dependencies": {
+    "@momsfriendlydevco/cache": "^3.3.5",
     "@momsfriendlydevco/es6": "^1.3.2",
     "@momsfriendlydevco/match": "^1.2.0",
     "@momsfriendlydevco/readable": "^1.2.1",
