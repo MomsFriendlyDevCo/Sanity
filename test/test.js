@@ -7,11 +7,12 @@ const __dirname = dirName('..');
 
 describe('Sanity - Example tests', ()=> {
 
-	before('Load environment', ()=> {
-		process.env.SANITY_MODULES = fsPath.join(__dirname, 'docs/examples/*.js');
-		Sanity.logLevel = 10;
-		return Sanity.loadEnv();
-	});
+	before('Load environment', ()=> Sanity
+		.set('logLevel', 10)
+		.loadEnv({
+			paths: fsPath.join(__dirname, 'docs/examples/*.js'),
+		})
+	);
 
 	it('verify example tests are loaded', ()=> {
 		expect(Object.keys(Sanity.modules).sort()).to.have.length.above(0);

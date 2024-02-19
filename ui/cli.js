@@ -22,7 +22,9 @@ let program = commanderExtras(Program)
 	.option('--no-summary', 'Skip output of an overall summary')
 	.option('--no-verdict', 'Skip output of an overall verdict')
 	.env('SANITY_MODULES', 'Comma / Semi-colon seperated value list of all glob-paths to search for modules')
+	.env('SANITY_REQUIRE', 'File to require during boot to provide additional config to the Sanity module')
 	.note('All IDs can be any valid @MomsFriendlyDevCo/Match expression such as "exact" "/regExp/" or "globs*"')
+	.note('If SANITY_REQUIRE or --require is used the file should export an async default functio which will be called as `(Sanity)`')
 	.parse(process.argv);
 
 // Extract all program arguments and dump into generic `args` object + `args.argv` values array
@@ -34,9 +36,13 @@ let args = {
 Promise.resolve()
 	.then(()=> Sanity
 		.set('logLevel', args.verbose ?? 0)
-		.loadEnv(program.path)
+		.loadEnv({
+			paths: program.path,
+			require: program.require,
+		})
 	)
 	.then(()=> Sanity.exec({
+		cache: args.cache,
 		filter: args.argv.length > 0 // Compute a filter based on the incoming test-ids (argv) values
 			? module => match.isMatch(args.argv, module.id)
 			: ()=> true,
