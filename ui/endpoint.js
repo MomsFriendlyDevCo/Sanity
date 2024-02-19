@@ -35,8 +35,8 @@ export default async function sanityMiddleware(options) {
 			.then(report => {
 				if (settings.consoleSummary)
 					console.log(
-						'Sanity checks completed',
-						Object.entries(report.modules)
+						'Sanity checks completed -',
+						Object.entries(report.summary)
 							.map(([status, count]) => `${status}:${count}`)
 							.join(', ')
 					);
