@@ -15,9 +15,9 @@ let program = commanderExtras(Program)
 	.option('-p, --path [paths]', 'Override the default environment globpath')
 	.option('-r, --require [path]', 'Optional file to further configure sanity before running')
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', (i, v) => v + 1, 0)
+	.option('-c, --use-cache', 'Use the cache - this may result in inaccurate data with a cache hit')
 	.option('--no-align', 'Do not align columns in output')
 	.option('--no-color', 'Force disable color')
-	.option('--no-cache', 'Disable caching of module rules - forces all modules to run')
 	.option('--no-modules', 'Skip individual module output')
 	.option('--no-summary', 'Skip output of an overall summary')
 	.option('--no-verdict', 'Skip output of an overall verdict')
@@ -42,7 +42,7 @@ Promise.resolve()
 		})
 	)
 	.then(()=> Sanity.exec({
-		cache: args.cache,
+		cache: !! args.useCache,
 		filter: args.argv.length > 0 // Compute a filter based on the incoming test-ids (argv) values
 			? module => match.isMatch(args.argv, module.id)
 			: ()=> true,
