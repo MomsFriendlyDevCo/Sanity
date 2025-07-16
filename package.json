@@ -35,13 +35,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@momsfriendlydevco/eslint-config": "^1.0.9",
+    "@momsfriendlydevco/eslint-config": "^2.3.1",
     "chai": "^5.1.0",
-    "eslint": "^8.56.0",
+    "eslint": "^9.31.0",
     "mocha": "^10.3.0"
-  },
-  "eslintConfig": {
-    "extends": "@momsfriendlydevco"
   },
   "dependencies": {
     "@momsfriendlydevco/cache": "^3.3.5",
