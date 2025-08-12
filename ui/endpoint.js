@@ -9,6 +9,7 @@ import Sanity from '#lib/sanity';
 * @param {Boolean} [options.verdictHeader=true] Include a simple `SANITY:{PASS|FAIL}` header as the very first line
 * @param {Boolean} [options.summary=true] Output a summary count of modules
 * @param {Object} [options.execOptions] Options to pass to each invocation of `Sanity.exec()`
+* @param {Function} [options.onReport] Function to call when a report + output has been constructed, can be used to email these somewhere. Called as `({report:SanityReport, output:String, settings:Object})`
 *
 * @returns {Promise<Function>} Eventual middleware function
 */
@@ -20,9 +21,11 @@ export default async function sanityMiddleware(options) {
 		summary: true,
 		execOptions: {},
 		consoleSummary: true,
+		onReport: ({report, output, settings}) => {},
 		...options,
 	};
 
+	// Bootstrap Sanity instance (once)
 	await Sanity
 		.set('colors', false)
 		.loadEnv({
@@ -30,9 +33,14 @@ export default async function sanityMiddleware(options) {
 			configure: settings.configure,
 		});
 
+	// Return Express/Connect middleware
 	return (req, res) => {
+		let report; // Eventual SanityReport Object
+		let output; // Eventual plain-text version of the report
+
 		Sanity.exec(settings.execOptions)
-			.then(report => {
+			.then(result => report = result)
+			.then(()=> {
 				if (settings.consoleSummary)
 					console.log(
 						'Sanity checks completed -',
@@ -45,7 +53,7 @@ export default async function sanityMiddleware(options) {
 					.map(mod => mod.id)
 					.reduce((t, v) => v.length > t ? v.length : t, 0);
 
-				return [
+				output = [
 					...(settings.verdictHeader ? [`SANITY:${report.verdict}`, ''] : []),
 					...report.modules
 						.map(mod => [
@@ -65,7 +73,8 @@ export default async function sanityMiddleware(options) {
 					),
 				].join('\n');
 			})
-			.then(output => res.type('text').send(output))
+			.then(()=> settings.onReport({report, output, settings}))
+			.then(()=> res.type('text').send(output))
 			.catch(e => {
 				console.warn('Error invoking Sanity middleware', e);
 				res.sendStatus(500);
