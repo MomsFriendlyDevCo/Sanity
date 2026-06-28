@@ -16,6 +16,7 @@
     "#utils/*": "./utils/*.js"
   },
   "exports": {
+    ".": "./lib/sanity.js",
     "./ui/*": "./ui/*.js",
     "./utils": "./utils/utils.js",
     "./utils/*": "./utils/*.js"

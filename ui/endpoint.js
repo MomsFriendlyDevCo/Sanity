@@ -6,6 +6,7 @@ import Sanity from '#lib/sanity';
 * @param {Object} [options] Additional options to mutate behaviour
 * @param {String|Array} [options.paths] Overriding module glob-path from the default process.env.SANITY_MODULES
 * @param {String} [options.require] JS file to import (once) before the cycle runs. Expected to export an async default function which will be called as `(Sanity)`
+* @param {Object} [options.cache] Optional pre-configured cache to use instead of the default
 * @param {Boolean} [options.verdictHeader=true] Include a simple `SANITY:{PASS|FAIL}` header as the very first line
 * @param {Boolean} [options.summary=true] Output a summary count of modules
 * @param {Object} [options.execOptions] Options to pass to each invocation of `Sanity.exec()`
@@ -17,6 +18,7 @@ export default async function sanityMiddleware(options) {
 	let settings = {
 		paths: null,
 		require: null,
+		cache: null,
 		verdictHeader: true,
 		summary: true,
 		execOptions: {},
@@ -31,6 +33,7 @@ export default async function sanityMiddleware(options) {
 		.loadEnv({
 			paths: settings.paths,
 			configure: settings.configure,
+			cache: settings.cache,
 		});
 
 	// Return Express/Connect middleware
