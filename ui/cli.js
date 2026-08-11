@@ -1,6 +1,5 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 
-import chalk from 'chalk';
 import match from '@momsfriendlydevco/match';
 import {program as Program} from 'commander';
 import Sanity from '#lib/sanity';
